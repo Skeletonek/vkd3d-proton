@@ -9276,7 +9276,11 @@ static bool d3d12_device_supports_16bit_shader_ops(struct d3d12_device *device, 
             device->device_info.vulkan_1_2_properties.shaderDenormPreserveFloat16 &&
             device->device_info.vulkan_1_2_properties.denormBehaviorIndependence != VK_SHADER_FLOAT_CONTROLS_INDEPENDENCE_NONE;
 
-    return device->device_info.vulkan_1_2_features.shaderFloat16 &&
+    /* VKD3D_CONFIG=allow_unadvertised_16bit: NVIDIA Pascal and RADV GFX8 compile FP16
+     * correctly, but never advertise shaderFloat16 (verified with bit-exact FP16 compute
+     * tests), and games such as THE FINALS ship native 16-bit shaders without checking the cap. */
+    return (device->device_info.vulkan_1_2_features.shaderFloat16 ||
+                    VKD3D_CONFIG_FLAG_IS_SET(ALLOW_UNADVERTISED_16BIT)) &&
            device->device_info.features2.features.shaderInt16 &&
            device->device_info.vulkan_1_1_features.storageBuffer16BitAccess &&
            (supports_fp16_denorm_preserve || allow_non_compliant_denorm) &&
