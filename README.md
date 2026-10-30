@@ -1,6 +1,9 @@
 # Fix for THE FINALS crash on Nvidia Pascal
 
-Adds `VKD3D_CONFIG=allow_unadvertised_16bit`, which lets shaders with native 16-bit ops run on GPUs that execute them correctly but never advertise `shaderFloat16` (Nvidia Pascal, AMD Polaris).
+>[!NOTE]
+>For AMD Polaris, use older Proton-GE version (Proton-GE 10-25)
+
+Adds `VKD3D_CONFIG=allow_unadvertised_16bit`, which lets shaders with native 16-bit ops run on GPUs that execute them correctly but never advertise `shaderFloat16`.
 
 ## Build
 
@@ -16,7 +19,7 @@ ninja -C build.x64 install
 
 1. Recommended to install fixed version of Proton-GE or Proton Cachy-OS so no files are overridden by Steam update
 2. Copy `d3d12.dll` and `d3d12core.dll` from `dist/x64` to the Proton directory. For example: `$HOME/.steam/steam/compatibilitytools.d/cachyos-11.0-20260602-slr/files/lib/wine/vkd3d-proton/x86_64-windows/`.
-3. Set the game's Steam launch options to `VKD3D_CONFIG=allow_unadvertised_16bit %command%`.
+3. Make sure to set the game's Steam launch options to `VKD3D_CONFIG=allow_unadvertised_16bit %command%`.
 
 ---
 
